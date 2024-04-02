@@ -1,3 +1,5 @@
+# Using Bayesian updating ------------------------
+
 library(bain) 
 
 prepbain <- function(students) {
@@ -27,7 +29,7 @@ prepbain <- function(students) {
 }
 
 # store age data
-students <- data.frame(student = 1:14, 
+students <- data.frame(student = 1:12, 
                        age = rep(NA, 14))
 
 students$age[1] <- 20*12 + 7
@@ -62,8 +64,6 @@ students$age[12] <- 25*12+4
 
 result4 <- prepbain(students)
 print(result4)
-
-
 
 # plot results
 N <- c(3,6,9,12)
@@ -101,4 +101,11 @@ BFs <- c(result1$fit$BF.u[1],
 
 plot(N, BFs, type = "l",ylab = "BF",xlab="N")
 
-# compare to alpha spending function
+# Using fixed alpha ------------------------------
+
+hypothesis.test.mean <- function(data, mean, sig){
+  # Conduct the t-test and retrieve alpha
+  t.test(x = data, mu = mean, alpha = sig)$
+}
+
+
