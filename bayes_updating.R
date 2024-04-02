@@ -30,7 +30,7 @@ prepbain <- function(students) {
 
 # store age data
 students <- data.frame(student = 1:12, 
-                       age = rep(NA, 14))
+                       age = rep(NA, 12))
 
 students$age[1] <- 20*12 + 7
 students$age[2] <- 22*12 + 10
@@ -103,9 +103,101 @@ plot(N, BFs, type = "l",ylab = "BF",xlab="N")
 
 # Using fixed alpha ------------------------------
 
-hypothesis.test.mean <- function(data, mean, sig){
-  # Conduct the t-test and retrieve alpha
-  t.test(x = data, mu = mean, alpha = sig)$
+# Create the function
+hypothesis.test.mean <- function(data, mean, sig = 0.05){
+  # Conduct the t-test and retrieve p value and 
+  p <- t.test(x = data, mu = mean)$p.value
+  n <- length(na.omit(data))
+  
+  # Decide to stop or continue trial
+  if (p > sig){
+    Decision <- 'Continue'
+  } else {
+    Decision <- 'Stop'
+  }
+  
+  # Format output
+  output <- list(p, n, Decision)
+  names(output) <- c('P-value', 'Sample Size', 'Decision')
+  
+  return(output)
 }
 
+# store age data again
+students <- data.frame(student = 1:15, 
+                       age = rep(NA, 15))
+
+students$age[1] <- 252
+students$age[2] <- 216
+students$age[3] <- 276
+
+# run analysis
+decision1 <- hypothesis.test.mean(students$age, 264)
+print(decision1)
+
+# collect more samples
+students$age[4] <- 240
+students$age[5] <- 264
+students$age[6] <- 228
+
+decision2 <- hypothesis.test.mean(students$age, 264)
+print(decision2)
+
+# collect more samples
+students$age[7] <- 264
+students$age[8] <- 252
+students$age[9] <- 228
+
+decision3 <- hypothesis.test.mean(students$age, 264)
+print(decision3)
+
+# collect final samples
+students$age[10] <- NA
+students$age[11] <- NA
+students$age[12] <- NA
+
+decision4 <- hypothesis.test.mean(students$age, 264)
+print(decision4)
+
+# collect final samples
+students$age[13] <- NA
+students$age[14] <- NA
+students$age[15] <- NA
+
+decision5 <- hypothesis.test.mean(students$age, 264)
+print(decision5)
+
+### plot results
+N <- c(3,6,9,12,15)
+timepoints <- c(decision1[[1]],
+                decision2[[1]],
+                decision3[[1]],
+                decision4[[1]],
+                decision5[[1]]
+)
+
+# Add a stopping sample size if there is one
+find_stop_index <- function(decision_list) {
+  stopsize <- NA
+  for (i in 1:length(decision_list)){
+    if (length(grep('Stop', decision_list[[i]])) > 0){
+      if (is.na(stopsize)){ # Find only the first stop
+        stopsize <- decision_list[[i]]$`Sample Size` # Return the sample size at that stop
+      }
+    }
+  }
+  if (length(stopsize) > 0) {
+    return(stopsize)
+  } else {
+    stopsize <- decision_list[[length(decision_list)]]$`Sample Size`
+    return(stopsize)
+  }
+}
+
+# Group decision variables and find stop
+decision_vars <- list(decision1, decision2, decision3, decision4)
+stopsize <- find_stop_index(decision_vars)
+
+# plot NperGRoup versus p value
+plot(N, timepoints, type = "l", ylab = "P value", xlab="N", ylim=(0:1.0), xlim=(3:stopsize))
 
