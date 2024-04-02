@@ -55,7 +55,7 @@ students$age[9] <- 23*12+8
 result3 <- prepbain(students)
 print(result3)
 
-# collect more samples
+# collect final samples
 students$age[10] <- 21*12+3
 students$age[11] <- 19*12+5
 students$age[12] <- 25*12+4
@@ -63,28 +63,20 @@ students$age[12] <- 25*12+4
 result4 <- prepbain(students)
 print(result4)
 
-# collect final sample
-students$age[13] <- 16*12+9
-students$age[14] <- NA
-
-result5 <- prepbain(students)
-print(result5)
 
 
 # plot results
-N <- c(3,6,9,12,14)
+N <- c(3,6,9,12)
 H1 <- c(result1$fit$PMPb[1],
         result2$fit$PMPb[1],
         result3$fit$PMPb[1],
-        result4$fit$PMPb[1],
-        result5$fit$PMPb[1]
+        result4$fit$PMPb[1]
 )
 
 Hc <- c(result1$fit$PMPb[2],
         result2$fit$PMPb[2],
         result3$fit$PMPb[2],
-        result4$fit$PMPb[2],
-        result5$fit$PMPb[2]
+        result4$fit$PMPb[2]
 )
 
 # create a legenda for the plot
@@ -104,8 +96,7 @@ legend(x = 12.5, y = 0.95,legend = leg, lty =lty)
 BFs <- c(result1$fit$BF.u[1],
         result2$fit$BF.u[1],
         result3$fit$BF.u[1],
-        result4$fit$BF.u[1],
-        result5$fit$BF.u[1]
+        result4$fit$BF.u[1]
 )
 
 plot(N, BFs, type = "l",ylab = "BF",xlab="N")
