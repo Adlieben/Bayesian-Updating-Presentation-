@@ -1,11 +1,11 @@
 # Bayesian-Updating-Presentation-
 
 # Tasks
-Florian:
+Florian: Slide 6, switch to R, explain
 
-Adam: 
+Adam: update readme before submission, add p-value comparison, continue in R with p values, switch to presentation, slide 7 and conclusion
 
-Su: 
+Su: Slides 3, 4 & 5
 
 # Presentation
 
