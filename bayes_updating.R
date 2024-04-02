@@ -127,31 +127,31 @@ hypothesis.test.mean <- function(data, mean, sig = 0.05){
 students <- data.frame(student = 1:15, 
                        age = rep(NA, 15))
 
-students$age[1] <- 252
-students$age[2] <- 216
-students$age[3] <- 276
+students$age[1] <- NA
+students$age[2] <- NA
+students$age[3] <- NA
 
 # run analysis
 decision1 <- hypothesis.test.mean(students$age, 264)
 print(decision1)
 
 # collect more samples
-students$age[4] <- 240
-students$age[5] <- 264
-students$age[6] <- 228
+students$age[4] <- NA
+students$age[5] <- NA
+students$age[6] <- NA
 
 decision2 <- hypothesis.test.mean(students$age, 264)
 print(decision2)
 
 # collect more samples
-students$age[7] <- 264
-students$age[8] <- 252
-students$age[9] <- 228
+students$age[7] <- NA
+students$age[8] <- NA
+students$age[9] <- NA
 
 decision3 <- hypothesis.test.mean(students$age, 264)
 print(decision3)
 
-# collect final samples
+# collect more samples
 students$age[10] <- NA
 students$age[11] <- NA
 students$age[12] <- NA
@@ -195,9 +195,67 @@ find_stop_index <- function(decision_list) {
 }
 
 # Group decision variables and find stop
-decision_vars <- list(decision1, decision2, decision3, decision4)
+decision_vars <- list(decision1, decision2, decision3, decision4, decision5)
 stopsize <- find_stop_index(decision_vars)
 
 # plot NperGRoup versus p value
-plot(N, timepoints, type = "l", ylab = "P value", xlab="N", ylim=(0:1.0), xlim=(3:stopsize))
+plot(N, timepoints, type = "l", ylab = "P value", xlab="N", ylim=(0:1.0), xlim=c(3,stopsize))
+abline(h = 0.05, lty = 2, col = 'red') # add threshold
+
+# Using O'Brien & Fleming ------------------------
+# We can use the same function as before, simply tweaking the significance levels
+# For 4 tests, the alpha levels are 0.0001, 0.004, 0.019 and 0.043
+boundaries <- c(0.0001, 0.004, 0.019, 0.043)
+
+# store age data again
+students <- data.frame(student = 1:12, 
+                       age = rep(NA, 12))
+
+students$age[1] <- NA
+students$age[2] <- NA
+students$age[3] <- NA
+
+# run analysis
+OF1 <- hypothesis.test.mean(students$age, 264, boundaries[1])
+print(OF1)
+
+# collect more samples
+students$age[4] <- NA
+students$age[5] <- NA
+students$age[6] <- NA
+
+OF2 <- hypothesis.test.mean(students$age, 264, boundaries[2])
+print(OF2)
+
+# collect more samples
+students$age[7] <- NA
+students$age[8] <- NA
+students$age[9] <- NA
+
+OF3 <- hypothesis.test.mean(students$age, 264, boundaries[3])
+print(OF3)
+
+# collect final samples
+students$age[10] <- NA
+students$age[11] <- NA
+students$age[12] <- NA
+
+OF4 <- hypothesis.test.mean(students$age, 264, boundaries[4])
+print(OF4)
+
+### plot results
+N <- c(3,6,9,12)
+timepoints <- c(OF1[[1]],
+                OF2[[1]],
+                OF3[[1]],
+                OF4[[1]]
+)
+
+# Group decision variables and find stop
+OF_vars <- list(OF1, OF2, OF3, OF4)
+stopsize <- find_stop_index(OF_vars)
+
+# plot NperGRoup versus p value
+plot(N, timepoints, type = "l", ylab = "P value", xlab="N", ylim=(0:1.0), xlim=c(3,stopsize))
+points(N, boundaries, type = "l", lty = 2, col = 'red') # OF threshold
 
