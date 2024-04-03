@@ -259,3 +259,20 @@ stopsize <- find_stop_index(OF_vars)
 plot(N, timepoints, type = "l", ylab = "P value", xlab="N", ylim=(0:1.0), xlim=c(3,stopsize))
 points(N, boundaries, type = "l", lty = 2, col = 'red') # OF threshold
 
+
+# Calculating inflation in fixed alpha -----------
+# Simulate
+alphas <- NULL
+
+for (i in 1:25) {
+  alphas[i] <- 1 - (1 - 0.05)^i
+}
+
+# Reformat
+alphas <- data.frame(FWE = alphas, Tests = 1:25)
+
+# Plot
+library(tidyverse)
+ggplot(alphas, aes(x = Tests, y = FWE)) + 
+  geom_line() +
+  theme_minimal()
